@@ -9,14 +9,16 @@ const WalletConfigSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  balance: {
-    // in USD
+  PurchasedCoins: {
     type: Number,
-    required: true,
+  },
+  AccquiredCoins: {
+    type: Number,
   },
   lastTransactionDate: {
     type: Date,
   },
 });
+
 
 module.exports = mongoose.model("wallet_config", WalletConfigSchema);
