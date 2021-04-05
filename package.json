@@ -1,10 +1,10 @@
 {
-  "name": "points-management",
+  "name": "coins-management",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node ./bin/www-points-management",
+    "start": "node ./bin/www-coins-management",
     "test": "cross-env NODE_ENV=test jest --ci --verbose --forceExit --runInBand --detectOpenHandles ./test"
   },
   "jest": {
