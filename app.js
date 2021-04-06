@@ -11,6 +11,9 @@ const { mongoose } = require("./config/mongoose");
 const cors = require("cors");
 require("./Events/Consumer");
 
+require("./config/redisSub")
+require("./config/redisPub")
+
 
 const userWalletRouter = require("./routes/walletUserRouter");
 

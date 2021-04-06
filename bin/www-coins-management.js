@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('points-management:server');
+var debug = require('debug')('coins-management:server');
 var http = require('http');
 
 /**
