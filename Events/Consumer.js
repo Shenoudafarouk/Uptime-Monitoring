@@ -27,7 +27,7 @@ userAccountConsumer.on('message', function (message, error) {
 
 
 
-module.exports = { userConsumer, userAccountConsumer, walletConsumer};
+module.exports = { userConsumer, userAccountConsumer};
 
 
 
