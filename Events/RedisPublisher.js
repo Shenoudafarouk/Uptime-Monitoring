@@ -34,7 +34,7 @@ class RedisPublisher {
 
         publisher.set("eventQueue", queue)
 
-        publisher.set(key, "1")
+        //publisher.set(key, "1")
 
         publisher.pexpireat(key, timestamp)
     }
