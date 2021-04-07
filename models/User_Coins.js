@@ -45,9 +45,7 @@ const UserCoinsSchema = new Schema({
 UserCoinsSchema.pre("save", async function (next) {
 
   let coins = this;
-  let dateInMilliSecs = new Date().getTime();
-
-  if ((this.isModified('expirationDate') && this.expirationDate.getTime() > dateInMilliSecs)) {
+  if (this.isNew && this.type == "AC") {
 
     let eventClass = EventFactory.getEventInstance("redisPublisher")
 
@@ -58,7 +56,7 @@ UserCoinsSchema.pre("save", async function (next) {
         eventName: "EXPIRE-COINS",
         timestamp: new Date(coins.expirationDate).getTime(),
       },
-      timestamp: new Date(coins.endDate).getTime(),
+      timestamp: new Date(coins.expirationDate).getTime(),
     }
 
     await eventClass.send(coinsProps)

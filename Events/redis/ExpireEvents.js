@@ -13,8 +13,9 @@ class ExpireEvents {
 
     let userCoinsId = eventData.userCoinsId;
     let userId = eventData.userId;
+    let remainingAmount = await UserCoins.findOne({_id: userCoinsId});
 
-    const { PurchasedCoins } = await WalletConfig.findOne({ userId: userId });
+    const { AccquiredCoins , totalPoints} = await WalletConfig.findOne({ userId: userId });
 
     await UserCoins.updateOne(
       { _id: userCoinsId },
@@ -23,20 +24,14 @@ class ExpireEvents {
 
     await WalletConfig.updateOne(
       { userId: userId },
-      { $set: { AccquiredCoins: 0, totalPoints: PurchasedCoins } }
+      { $set: { AccquiredCoins: AccquiredCoins - remainingAmount, totalPoints: totalPoints  - remainingAmount } }
     );
-    let userCoinsUpdated = await UserCoins.findOne({ userId: userId });
-    let data = UserCoinsPublisher.updateUserCoinsParams(userCoinsUpdated);
+    
+
+    let userWalletUpdated = await WalletConfig.findOne({ userId: userId });
+    let data = UserCoinsPublisher.updateUserCoinsParams(userWalletUpdated);
     let publisher = EventFactory.getEventInstance("kafkaPublisher");
     publisher.send(data);
-
-    /* userUpdateAddedEvent(
-      userId,
-      "BQT_SUBSCRIPTION_DEACTIVATED",
-      "id",
-      bouquetId
-    ); */
-
     
   }
 }

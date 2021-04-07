@@ -1,19 +1,19 @@
 
 class UserCoinsPublisher {
 
-    updateUserCoinsParams(userCoins) {
-        const message = {
-            _id: userCoins._id,
-            userId: userCoins.userId,
-            status: userCoins.status
+    updateUserCoinsParams(userWallet) {
+        const data = {
+            userId: userWallet.userId,
+            totalPoints: userWallet.totalPoints,
+            AccquiredCoins: userWallet.AccquiredCoins
         }
         //console.log("message log",message)
-        let payloads = [
-        {
-            topic: 'userCoinsTopic',
-            messages: `{"event":"UPDATE_USER_COINS","data":${JSON.stringify({ userAccount: message })}}`
-        }
-        ];
+
+        payloads = [{
+            topic: 'walletTopic',
+            messages: `{"event":"UPDATE_USER_WALLET","data":${data}}`
+        }, ];
+
 
         return payloads
 
