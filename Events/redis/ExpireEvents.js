@@ -15,7 +15,7 @@ class ExpireEvents {
     let userId = eventData.userId;
     let remainingAmount = await UserCoins.findOne({_id: userCoinsId});
 
-    const { AccquiredCoins , totalPoints} = await WalletConfig.findOne({ userId: userId });
+    const { AcquiredCoins , totalPoints} = await WalletConfig.findOne({ userId: userId });
 
     await UserCoins.updateOne(
       { _id: userCoinsId },
@@ -24,7 +24,7 @@ class ExpireEvents {
 
     await WalletConfig.updateOne(
       { userId: userId },
-      { $set: { AccquiredCoins: AccquiredCoins - remainingAmount, totalPoints: totalPoints  - remainingAmount } }
+      { $set: { AcquiredCoins: AcquiredCoins - remainingAmount, totalPoints: totalPoints  - remainingAmount } }
     );
     
 

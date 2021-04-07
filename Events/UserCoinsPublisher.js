@@ -5,7 +5,7 @@ class UserCoinsPublisher {
         const data = {
             userId: userWallet.userId,
             totalPoints: userWallet.totalPoints,
-            AccquiredCoins: userWallet.AccquiredCoins
+            AcquiredCoins: userWallet.AcquiredCoins
         }
         //console.log("message log",message)
 

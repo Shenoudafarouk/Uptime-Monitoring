@@ -31,6 +31,8 @@ module.exports.getWalletInfoValidator = function (req, res, next) {
         });
     }
 }
+
+
 module.exports.addCreditValidator = function (req, res, next) {
     try {
         const querySchema = {
@@ -102,3 +104,30 @@ module.exports.addCoinsValidator = function (req, res, next) {
     }
 }
 
+module.exports.getAcquiredCoins = function (req, res, next) {
+    try {
+        const querySchema = {
+            language: joi.string().required().default("en"),
+            userId: ObjectId().required(),
+        };
+
+
+        const queryValidation = joi.validate(req.query, querySchema, { allowUnknown: false })
+        //const bodyValidation = joi.validate(req.body, bodySchema, { allowUnknown: false })
+        const validationError = queryValidation.error
+
+        if (validationError) {
+            return res.status(400).send({
+                status: 'BAD_REQUEST',
+                message: validationError.details[0].message
+            });
+        }
+        return next()
+    } catch (error) {
+        console.error('walletUserValidator --> getAcquiredCoins.js ', error);
+        return res.status(500).json({
+            status: 'SERVER_ERROR',
+            message: 'Internal Server Error!'
+        });
+    }
+}

@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const Wallet = require('../models/Wallet_Config')
+const UserCoins = require('../models/User_Coins');
 const Wallet_Transaction = require('../models/Wallet_Transaction')
 const Exchange_Rate = require('../models/Exchang_Rate')
 const {
@@ -55,6 +56,8 @@ module.exports.getWalletInfo = async function (req, res) {
         });
     }
 }
+
+
 
 module.exports.getWalletTransactions = async function (req, res) {
 
@@ -394,6 +397,38 @@ module.exports.getExchangeRatev2 = async function (req, res) {
 
     } catch (error) {
         console.log("walletUserController.js ====> getExchangeRatev2", error);
+        let message = getStatusAndErrorMessage('all_error_mg_general', req.query.language);
+        res.status(500).json({
+            status: "SERVER_ERROR",
+            ...message
+        });
+    }
+}
+
+module.exports.getAcquiredCoins = async function (req, res) {
+
+    try {
+        const userId = req.query.userId
+        const language = req.query.language
+
+        const user = await User.findById(userId)
+        if (!user) {
+            const message = getStatusAndErrorMessage("all_error_msg_user_is_not_exist", language)
+            return res.status(400).send({
+                status: "USER_NOT_EXISTS",
+                ...message
+            })
+        }
+        const userCoins = await UserCoins.find({
+            userId
+        })
+
+        return res.send({
+            status: "OK",
+            result: userCoins
+        })
+    } catch (error) {
+        console.log("walletUserController.js====>getAcquiredCoins", error);
         let message = getStatusAndErrorMessage('all_error_mg_general', req.query.language);
         res.status(500).json({
             status: "SERVER_ERROR",
