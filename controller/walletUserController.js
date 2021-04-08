@@ -421,11 +421,26 @@ module.exports.getAcquiredCoins = async function (req, res) {
         }
         const userCoins = await UserCoins.find({
             userId
-        })
+        });
+
+        if (userCoins.length < 1) {
+            return res.send({
+                status: "OK",
+                result: []
+            })
+        }
+
+        const acquiredCoins = userCoins.map((item) => {
+            return {
+                source: item.source,
+                expirationDate: item.expirationDate,
+                amount: item.remainingAmount
+            }
+        });
 
         return res.send({
             status: "OK",
-            result: userCoins
+            result: acquiredCoins
         })
     } catch (error) {
         console.log("walletUserController.js====>getAcquiredCoins", error);
