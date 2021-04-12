@@ -13,6 +13,7 @@ router.post('/coinsToCurrency', walletUserController.coinsToCurrency)
 router.post('/getWalletTransactions', walletUserController.getWalletTransactions)
 router.get('/V2/getExchangeRate', walletUserController.getExchangeRatev2)
 router.get('/getAcquiredCoins', walletUserValidator.getAcquiredCoins, walletUserController.getAcquiredCoins)
+router.post('/consumeCoins', walletUserValidator.consumeCoinsValidator, walletUserController.consumeCoins)
 
 
 module.exports = router;

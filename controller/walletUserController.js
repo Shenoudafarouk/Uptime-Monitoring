@@ -271,12 +271,12 @@ module.exports.addCoins = async function (req, res) {
                 footer: "all_email_footer",
                 language: language
             }, {
-                    "@var_first_name": user.firstName,
-                    "@var_payment_price": paidPrice,
-                    "@var_payment_currency": currency,
-                    "@var_payment_date": new Date(paymentDate).toLocaleDateString("en-US"),
-                    "@var_reference_number": paymentReferenceId
-                })
+                "@var_first_name": user.firstName,
+                "@var_payment_price": paidPrice,
+                "@var_payment_currency": currency,
+                "@var_payment_date": new Date(paymentDate).toLocaleDateString("en-US"),
+                "@var_reference_number": paymentReferenceId
+            })
         }
 
         if (user.mobile) {
@@ -444,6 +444,99 @@ module.exports.getAcquiredCoins = async function (req, res) {
         })
     } catch (error) {
         console.log("walletUserController.js====>getAcquiredCoins", error);
+        let message = getStatusAndErrorMessage('all_error_mg_general', req.query.language);
+        res.status(500).json({
+            status: "SERVER_ERROR",
+            ...message
+        });
+    }
+}
+
+module.exports.consumeCoins = async function (req, res) {
+
+    try {
+        const { userId, priceInCoins } = req.body
+        const { language } = req.query
+
+        let user = await User.findById(mongoose.Types.ObjectId(userId)).lean();
+
+        if (!user) {
+            const message = getStatusAndErrorMessage("all_error_msg_user_is_not_exist", language)
+            return res.status(400).send({
+                status: "USER_NOT_EXISTS",
+                ...message
+            })
+        }
+
+        let userWallet = await Wallet.findOne({ userId });
+
+        if (userWallet.totalPoints < priceInCoins) {
+
+            let message = getStatusAndErrorMessage('rent_title_error_msg_user_not_has_enough_balance', language).message;
+            return res.status(400).send({
+                status: 'INSUFFICIENT_BALANCE',
+                message: message
+            })
+        }
+
+
+        const userAcquiredCoins = await UserCoins.find({ userId, status: "ACTIVE", type: "AC" })
+            .sort({ expirationDate: 'asc' })
+            .select("_id remainingAmount expirationDate status");
+
+        const userPurchasedCoins = await UserCoins.find({ userId, status: "ACTIVE", type: "PC" })
+            .select("_id remainingAmount expirationDate status");
+
+
+        const userCoins = userAcquiredCoins.concat(userPurchasedCoins);
+
+
+        userWallet.totalPoints = userWallet.totalPoints - priceInCoins;
+
+        if (userWallet.acquiredCoins) {
+
+            if (userWallet.acquiredCoins >= priceInCoins) {
+
+                userWallet.acquiredCoins = userWallet.acquiredCoins - priceInCoins;
+
+            } else {
+                let remaining = userWallet.acquiredCoins - priceInCoins;
+                userWallet.PurchasedCoins = remaining + userWallet.PurchasedCoins
+                userWallet.acquiredCoins = 0
+            }
+        }
+
+        userCoinsUpdated = [];
+        let i = 0;
+        while (priceInCoins) {
+
+
+            if (priceInCoins <= userCoins[i].remainingAmount) {
+                remaining = userCoins[i].remainingAmount - priceInCoins;
+                userCoins[i].remainingAmount = remaining;
+                userCoinsUpdated.push(userCoins[i])
+                break;
+            }
+            priceInCoins -= userCoins[i].remainingAmount;
+            userCoins[i].remainingAmount = 0;
+            userCoins[i].status = "CONSUMED"
+            userCoinsUpdated.push(userCoins[i]);
+
+            i++;
+
+        }
+
+        for (let i = 0; i < userCoinsUpdated.length; i++) {
+
+            UserCoins.update({ _id: mongoose.Types.ObjectId(userCoinsUpdated[i]._id) }, { $set: userCoinsUpdated[i] })
+
+        }
+
+        await userWallet.save();
+
+
+    } catch (error) {
+        console.log("walletUserController.js====>consumeCoins", error);
         let message = getStatusAndErrorMessage('all_error_mg_general', req.query.language);
         res.status(500).json({
             status: "SERVER_ERROR",
