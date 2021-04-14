@@ -506,7 +506,6 @@ module.exports.consumeCoins = async function (req, res) {
             }
         }
 
-        userCoinsUpdated = [];
         let i = 0;
         while (priceInCoins) {
 
@@ -514,23 +513,17 @@ module.exports.consumeCoins = async function (req, res) {
             if (priceInCoins <= userCoins[i].remainingAmount) {
                 remaining = userCoins[i].remainingAmount - priceInCoins;
                 userCoins[i].remainingAmount = remaining;
-                userCoinsUpdated.push(userCoins[i])
                 break;
             }
             priceInCoins -= userCoins[i].remainingAmount;
             userCoins[i].remainingAmount = 0;
             userCoins[i].status = "CONSUMED"
-            userCoinsUpdated.push(userCoins[i]);
 
             i++;
 
         }
-
-        for (let i = 0; i < userCoinsUpdated.length; i++) {
-
-            UserCoins.update({ _id: mongoose.Types.ObjectId(userCoinsUpdated[i]._id) }, { $set: userCoinsUpdated[i] })
-
-        }
+        
+        await UserCoins.updateMany({ userId, status: "ACTIVE" }, { $set: userCoins })
 
         await userWallet.save();
 
