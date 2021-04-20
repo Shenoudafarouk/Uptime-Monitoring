@@ -522,11 +522,15 @@ module.exports.consumeCoins = async function (req, res) {
             i++;
 
         }
-        
+
         await UserCoins.updateMany({ userId, status: "ACTIVE" }, { $set: userCoins })
 
-        await userWallet.save();
+        const wallet = await userWallet.save();
 
+        res.send({
+            status: "OK",
+            result: wallet
+        })
 
     } catch (error) {
         console.log("walletUserController.js====>consumeCoins", error);
