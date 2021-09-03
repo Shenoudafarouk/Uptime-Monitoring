@@ -1,57 +1,43 @@
 {
-  "name": "coins-management",
+  "name": "uptime-monitoring",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node ./bin/www-coins-management",
-    "test": "cross-env NODE_ENV=test jest --ci --verbose --forceExit --runInBand --detectOpenHandles ./test"
+    "start": "node ./bin/www-upTime-management",
+    "test": "npm run eslint && ./node_modules/mocha/bin/mocha test",
+    "eslint": "./node_modules/.bin/eslint ./lib"
   },
   "jest": {
     "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
-    ],
-    "setupFiles": [
-      "./config/jest.setup.js"
     ]
   },
   "dependencies": {
-    "@google-cloud/pubsub": "^2.10.0",
     "@sentry/node": "^4.6.5",
     "auto-bind": "^4.0.0",
-    "aws-sdk": "^2.656.0",
-    "axios": "^0.18.1",
-    "cookie-parser": "~1.4.3",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.4",
-    "crypto-js": "^4.0.0",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.0",
-    "geoip-lite": "^1.4.1",
     "helmet": "^3.16.0",
-    "in-app-purchase": "^1.11.4",
+    "http-errors": "^1.6.3",
     "joi": "^13.7.0",
-    "joi-objectid": "^3.0.1",
-    "kafka-node": "^5.0.0",
-    "kafkajs": "^1.12.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "5.4.0",
     "morgan": "~1.9.0",
-    "nodemailer": "^4.6.8",
-    "number-to-arabic": "^1.0.2",
-    "properties-reader": "^0.3.1",
-    "randomstring": "^1.1.5",
-    "redis": "^3.1.0",
-    "request": "^2.88.2",
-    "request-promise": "^4.2.2",
-    "rp": "^0.2.0",
-    "translate": "^1.1.2",
-    "uuid": "^3.3.2"
+    "nodemailer": "^6.5.0",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "swagger-ui-express": "^4.1.6"
+
   },
   "devDependencies": {
-    "cross-env": "^7.0.0",
-    "jest": "^25.1.0",
-    "snyk": "^1.200.1",
-    "supertest": "^4.0.2"
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "mocha": "^7.1.2",
+    "nock": "^12.0.3"
   }
 }

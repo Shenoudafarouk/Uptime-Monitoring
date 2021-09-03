@@ -1,21 +1,16 @@
 const joi = require('joi');
 
-module.exports.sendEmailValidator = function (query, body) {
-    const querySchema = joi.object().keys({
-        language: joi.string().optional().default("en")
-    });
-
+module.exports.sendEmailValidator = function (email) {
+    
     const bodySchema = joi.object().keys({
         to: joi.string().required(),
-        subject: joi.string().required(),
-        msg: joi.string().required(),
-        parameter: joi.string().required()
+        type: joi.string().required(),
+        variables: joi.object().required(),
     });
     
-    // validate both query and body schemas and return error, if there is, returned by any one of them
-    var querySchemaValidation = querySchema.validate(query, { allowUnknown: true });
-    var bodySchemaValidation = bodySchema.validate(body, { allowUnknown: true });
+    // validate body schemas and return error, if there is, returned by any one of them
+    var bodySchemaValidation = bodySchema.validate(email, { allowUnknown: true });
 
-    if (querySchemaValidation.error) return querySchemaValidation;
-    else return bodySchemaValidation;
+    if (bodySchemaValidation.error)
+         return bodySchemaValidation;
 };

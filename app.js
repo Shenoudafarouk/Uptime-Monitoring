@@ -1,21 +1,20 @@
+const createError = require("http-errors");
 const express = require("express");
 const helmet = require("helmet");
 const path = require("path");
 require("dotenv").config({
   path: path.join(__dirname, ".env"),
 });
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
-const { mongoose } = require("./config/mongoose");
+const mongoose = require("mongoose");
+require("./config/mongoose");
 const cors = require("cors");
-require("./Events/Consumer");
+const passport = require("passport");
+const swaggerUi = require("swagger-ui-express")
+const swaggerDocument = require("./swagger.json");
 
-require("./config/redisSub")
-require("./config/redisPub")
-
-
-const userWalletRouter = require("./routes/walletUserRouter");
+const authRouter = require("./routes/authRouter");
+const monitorRouter = require("./routes/monitorRouter");
 
 console.log("--------> from app.js ------>");
 
@@ -33,27 +32,35 @@ app.use(
     extended: true,
   })
 );
-app.use(cookieParser());
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
-// error handler
-app.use(function (err, req, res, next) {
-  res.locals.message = err.message;
-  res.status(err.status || 500).json({
-    status: "UNKOWN",
-    message: err.message,
-  });
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
+
+
+app.use(passport.initialize());
+require("./config/passport")(passport);
+
+app.use("/auth", authRouter);
+app.use("/user/monitor", monitorRouter);
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
 });
 
-app.use("/user/wallet", userWalletRouter);
-
-// Optional fallthrough error handler
-app.use(function onError(err, req, res, next) {
-  // The error id is attached to `res.sentry` to be returned
-  // and optionally displayed to the user for support.
-  res.statusCode = 500;
-  res.end(res.sentry + "\n");
+// error handler
+app.use(function (err, req, res, next) {
+  // render the error page
+  res.status(err.status || 500).json({
+    status: "BAD_REQUEST",
+    message: err.message,
+  });
+  console.log(err);
 });
 
 module.exports = app;

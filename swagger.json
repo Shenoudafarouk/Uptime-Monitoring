@@ -1,0 +1,471 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "UpTime Monitoring",
+    "description": "UpTime APIs"
+  },
+  "host": "localhost:3000/",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "API for Users in the system"
+    },
+    {
+      "name": "Monitor",
+      "description": "API for Monitoring URL in the system"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "auth/signup": {
+      "post": {
+        "tags": ["User"],
+        "summary": "create user",
+        "description": "Create new user in system",
+        "operationId": "signup",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "create user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/signup"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "authController"
+      }
+    },
+    "auth/verifyEmail": {
+      "post": {
+        "tags": ["User"],
+        "summary": "verify the Email",
+        "description": "verify the Email of the user in system",
+        "operationId": "verifyEmail",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "verify user Email",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/verifyEmail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "userController"
+      }
+    },
+    "auth/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User Login",
+        "description": "user can login in the system",
+        "operationId": "login",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "login Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "authController"
+      }
+    },
+    "user/monitor/create": {
+      "post": {
+        "tags": ["Monitor"],
+        "summary": "create url check",
+        "description": "monitoring urls for users",
+        "operationId": "create",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Check Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/createMonitor"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "monitorController"
+      }
+    },
+    "user/monitor/update": {
+      "patch": {
+        "tags": ["Monitor"],
+        "summary": "update url check",
+        "description": "update url check for users",
+        "operationId": "update",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Check Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateMonitor"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "monitorController"
+      }
+    },
+    "user/monitor/delete": {
+      "delete": {
+        "tags": ["Monitor"],
+        "summary": "delete url check",
+        "description": "delete url check",
+        "operationId": "delete",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "login Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/deleteMonitor"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "monitorController"
+      }
+    },
+    "user/monitor/pause": {
+      "post": {
+        "tags": ["Monitor"],
+        "summary": "pause url check",
+        "description": "pause url check",
+        "operationId": "pause",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "login Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pauseMonitor"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "monitorController"
+      }
+    },
+    "user/monitor/myReport": {
+      "get": {
+        "tags": ["Monitor"],
+        "summary": "get Report",
+        "description": "get urls check Report for user",
+        "operationId": "getMyChecks",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "monitorController"
+      }
+    },
+    "user/monitor/checksByTags": {
+      "post": {
+        "tags": ["Monitor"],
+        "summary": "get checks",
+        "description": "get checks by Tags ",
+        "operationId": "checksByTags",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Tags Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/checksByTags"
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid operation"
+          },
+          "500": {
+            "description": "server error"
+          }
+        },
+        "x-swagger-router-controller": "monitorController"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  },
+  "definitions": {
+    "signup": {
+      "type": "object",
+      "required": ["name", "email", "password"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "name": "Shenouda Farouk",
+        "email": "Shenoudafarouk22@yahoo.com",
+        "password": "12345678"
+      }
+    },
+    "verifyEmail": {
+      "type": "object",
+      "required": ["email", "code"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "email": "Shenoudafarouk22@yahoo.com",
+        "code": "24931"
+      }
+    },
+    "login": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "email": "Shenoudafarouk22@yahoo.com",
+        "password": "12345678"
+      }
+    },
+    "createMonitor": {
+      "type": "object",
+      "required": ["website", "title", "interval"],
+      "properties": {
+        "website": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "number"
+        }
+      },
+      "example": {
+        "website": "https://www.youtube.com/",
+        "title": "Youtube",
+        "interval": 10
+      }
+    },
+    "updateMonitor": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "updatedData": {
+          "type": "object"
+        }
+      },
+      "example": {
+        "id": "613164076372440ceb2ebbbf",
+        "updatedData": {
+          "title": "Youtube music",
+          "website": "https://www.youtube.com/abc",
+          "interval": 0.8
+        }
+      }
+    },
+    "deleteMonitor": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "id": "613164076372440ceb2ebbbf"
+      }
+    },
+    "pauseMonitor": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "id": "613164076372440ceb2ebbbf"
+      }
+    },
+    "checksByTags": {
+      "type": "object",
+      "required": ["tags"],
+      "properties": {
+        "tags": {
+          "type": "array"
+        }
+      },
+      "example": {
+        "tags": ["Production", "Test"]
+      }
+    }
+  }
+}
