@@ -147,6 +147,9 @@
           "400": {
             "description": "Invalid operation"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "server error"
           }
@@ -183,6 +186,9 @@
           },
           "400": {
             "description": "Invalid operation"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "server error"
@@ -221,6 +227,9 @@
           "400": {
             "description": "Invalid operation"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "server error"
           }
@@ -258,6 +267,9 @@
           "400": {
             "description": "Invalid operation"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "server error"
           }
@@ -284,6 +296,9 @@
           },
           "400": {
             "description": "Invalid operation"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "server error"
@@ -322,6 +337,9 @@
           },
           "400": {
             "description": "Invalid operation"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "server error"
@@ -406,9 +424,24 @@
         }
       },
       "example": {
-        "website": "https://www.youtube.com/",
-        "title": "Youtube",
-        "interval": 10
+        "website": "https://jsonplaceholder.typicode.com",
+        "title": "jsonplaceholder ",
+        "interval": 10,
+         "confing": {
+            "intervalUnits": "minutes"
+          },
+         "httpOptions": {
+            "path": "/users",
+            "method": "get",
+            "query": {
+              "id": 1
+            }
+          },
+          "expect": {
+            "statusCode": 200
+          },
+          "tags": ["Production", "userCheck"]
+      
       }
     },
     "updateMonitor": {
@@ -425,9 +458,16 @@
       "example": {
         "id": "613164076372440ceb2ebbbf",
         "updatedData": {
-          "title": "Youtube music",
-          "website": "https://www.youtube.com/abc",
-          "interval": 0.8
+          "title": "PlaceHolder",
+          "interval": 5,
+          "httpOptions": {
+            "path": "/users",
+            "method": "get",
+            "query": {
+              "id": 3
+            }
+          },
+          "tags": ["Production", "userCheck", "getUser"]
         }
       }
     },

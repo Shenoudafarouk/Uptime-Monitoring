@@ -66,7 +66,7 @@ class MonitorController {
   async getMyChecks(req, res, next) {
     try {
       const response = await this.monitorService.getMyChecks(req.user.id);
-      return res.send({ status: "OK", result: response });
+      return res.send({ status: "OK", result: response, total: response.length });
     } catch (error) {
       console.error(error);
       return res.status(error.statusCode || 500).json({
@@ -79,7 +79,7 @@ class MonitorController {
   async checksByTags(req, res, next) {
     try {
       const response = await this.monitorService.checksByTags(req.user.id, req.body.tags);
-      return res.send({ status: "OK", result: response });
+      return res.send({ status: "OK", result: response , total: response.length});
     } catch (error) {
       console.error(error);
       return res.status(error.statusCode || 500).json({

@@ -89,15 +89,15 @@ class MonitorService {
     if (!myChecks.length) return [];
 
     let checkReport = myChecks.map((check) => ({
+      id: check._id,
       title: check.title,
       website: check.website,
       status: check.isUp == true ? "ONLINE" : "DOWN",
-      availability: check.availability,
+      availability: `${parseInt(check.availability)}%` ,
       outages: check.totalDownTimes,
       uptime: check.uptime,
       downtime: check.downtime,
-      currentStatus: check.currentStatus,
-      responseTime: check.avgResponseTime,
+      responseTime: `${parseInt(check.avgResponseTime)} ms`,
       totalRequests: check.totalRequests,
       lastDownTime: check.lastDownTime,
       lastRequest: check.lastRequest,

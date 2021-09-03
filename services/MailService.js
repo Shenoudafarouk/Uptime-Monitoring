@@ -14,6 +14,7 @@ class MailService {
     if (type == "ALERT_NOTIFICATION")
       return `<p>Your check on the [URL] goes down </p>
               <p>ResponseTime: [RESPONSE_TIME] </p>
+              <p>statusCode: [STATUS_CODE] </p>
               <p>Message: [STATUS_MESSAGE] </p>`;
   }
 
