@@ -42,17 +42,3 @@ The main idea to build an uptime monitoring RESTful API server which allows auth
   - `responseTime` - The average response time for the URL.
   - `history` - Timestamped logs of the polling requests.
 
-## Expectations
-
-- Code quality.
-- Code scalability as we should be able to add a new alerting notification channel like Slack, Firebase, SMS, etc.. with the minimum possible changes.
-- Unit tests.
-
-## Bonus
-
-- Swagger API documentation.
-- Code linting.
-- Docker.
-- [Pushover](https://pushover.net/) integration to receive alerts on mobile devices.
-
-Try your best to implement as much as you can from the given features and feel free to add more if you want to.
