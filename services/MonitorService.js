@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 class MonitorService {
   async create(data) {
-    let { userId, website, threshold, tags } = data;
+    let { userId, website, threshold, tags, confing } = data;
 
     let check = await Monitor.findOne({ userId, website });
 
@@ -16,6 +16,7 @@ class MonitorService {
         message: "this check is already exists",
       };
 
+    data._maxListeners = 5
     let monitor = await pingServers(data, null);
     monitor.userId = userId;
     monitor.monitorId = monitor.id;
@@ -24,6 +25,7 @@ class MonitorService {
         monitor.totalRequests) *
       100;
     monitor.threshold = threshold;
+    monitor.confing = confing
     monitor.tags = tags;
     let checkDate = await new Monitor(monitor).save();
 

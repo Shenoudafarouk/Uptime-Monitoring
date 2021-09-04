@@ -12,9 +12,10 @@ async function pingServers(monitorData, prevData) {
     monitor = new Monitor(monitorData);
   }
 
+  monitor
   monitor.on("up", function (res, state) {
     console.log("Yay!! " + state.website + " is up.");
-    updateDate(res, state);
+    updateDate(res, state, monitor);
   });
 
   monitor.on("down", async function (res, state) {
@@ -22,7 +23,6 @@ async function pingServers(monitorData, prevData) {
       monitorData.threshold == monitor.totalDownTimes ||
       monitor.totalDownTimes == 1
     ) {
-      console.log(monitorData.userEmail);
       new MailService().send({
         to: monitorData.userEmail,
         type: "ALERT_NOTIFICATION",
@@ -34,7 +34,7 @@ async function pingServers(monitorData, prevData) {
         },
       });
     }
-    updateDate(res, state);
+    updateDate(res, state, monitor);
     console.log("ops!! " + state.website + " is down.");
   });
 
@@ -55,12 +55,11 @@ async function pingServers(monitorData, prevData) {
         },
       });
     }
-    updateDate(res, state);
+    updateDate(res, state, monitor);
     console.log("error!! " + state.website + " is crash.");
   });
 
-  monitor.on("stop", function (res) {
-    updateDate(state);
+  monitor.on("stop", function (res, state) {
     console.log(state.website + " monitor has stopped.");
   });
 
@@ -68,14 +67,21 @@ async function pingServers(monitorData, prevData) {
   monitors.push(monitor);
   //console.log(monitor);
   //console.log(urls);
-
+  //console.log(monitorData);
   return monitor;
 }
 
-async function updateDate(res, state) {
+async function updateDate(res, state, monitorObj) {
   try {
-    let monitor = await MonitorModel.findOne({ website: state.website });
+    let monitor = await MonitorModel.findOne({ website: monitorObj.website, userId: monitorObj.userId });
+    if (monitorObj._maxListeners == monitor.maxCheck) {
+      monitorObj.stop()
+    }
     if (monitor) {
+      if (monitor.paused){
+        monitorObj.pause()
+        console.log(state.website + " Monitor has Paused.");
+      }
       let availability =
         ((monitor.totalRequests - monitor.totalDownTimes) /
           monitor.totalRequests) *
@@ -83,14 +89,11 @@ async function updateDate(res, state) {
       
       if (state.statusCode == 500) {
         await MonitorModel.updateMany(
-          { website: state.website },
+          { website: monitorObj.website, userId: monitorObj.userId },
           {
             $set: {
-              isUp: false,
-              totalRequests: monitor.totalRequests + 1,
-              totalDownTimes: monitor.totalDownTimes + 1,
-              lastDownTime: new Date(),
-              lastRequest: new Date(),
+              ...state,
+              maxCheck: monitor.maxCheck + 1,
               avgResponseTime:
                 (monitor.avgResponseTime + state.responseTime) /
                 monitor.totalRequests,
@@ -100,10 +103,11 @@ async function updateDate(res, state) {
         );
       } else {
         await MonitorModel.updateMany(
-          { website: state.website },
+          { website: state.website, userId: monitorObj.userId },
           {
             $set: {
               ...state,
+              maxCheck: monitor.maxCheck + 1,
               avgResponseTime:
                 (monitor.avgResponseTime + res.responseTime) /
                 monitor.totalRequests,
@@ -117,5 +121,6 @@ async function updateDate(res, state) {
     console.log(error);
   }
 }
+
 
 module.exports = pingServers;

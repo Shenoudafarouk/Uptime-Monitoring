@@ -427,7 +427,7 @@
         "website": "https://jsonplaceholder.typicode.com",
         "title": "jsonplaceholder ",
         "interval": 10,
-         "confing": {
+         "config": {
             "intervalUnits": "minutes"
           },
          "httpOptions": {
