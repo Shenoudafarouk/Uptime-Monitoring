@@ -67,3 +67,10 @@ Swagger API documentation
 to open Swagger API documentation just browse to 
 
     http://localhost:3000/api-docs
+
+Test
+-----------------
+```sh
+$ npm test
+```
+
