@@ -39,7 +39,7 @@ class MonitorController {
 
   async delete(req, res, next) {
     try {
-      const response = await this.monitorService.delete(req.body.id);
+      const response = await this.monitorService.delete(req.body.id , req.user.id);
       return res.send({ status: "DELETE_SUCCESSFULLY", result: response });
     } catch (error) {
       console.error(error);
@@ -52,7 +52,7 @@ class MonitorController {
 
   async pause(req, res, next) {
     try {
-      const response = await this.monitorService.pause(req.body.id);
+      const response = await this.monitorService.pause(req.body.id, req.user.id);
       return res.send({ status: "PAUSED_SUCCESSFULLY", result: response });
     } catch (error) {
       console.error(error);

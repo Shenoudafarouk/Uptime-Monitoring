@@ -81,9 +81,8 @@ const MonitorSchema = new Schema({
   tags: {
     type: Array
   },
-  maxCheck: {
-    type: Number,
-    default: 0
+  _maxListeners: {
+    type: Number
   }
 });
 

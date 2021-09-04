@@ -1,11 +1,10 @@
 const Monitor = require("../models/Monitor");
 const User = require("../models/User");
 const pingServers = require("../monitor-server");
-const mongoose = require("mongoose");
 
 class MonitorService {
   async create(data) {
-    let { userId, website, threshold, tags, confing } = data;
+    let { userId, website, threshold } = data;
 
     let check = await Monitor.findOne({ userId, website });
 
@@ -16,17 +15,9 @@ class MonitorService {
         message: "this check is already exists",
       };
 
-    data._maxListeners = 5
+    data._maxListeners = 5;
+    data.threshold = threshold ? threshold : 1;
     let monitor = await pingServers(data, null);
-    monitor.userId = userId;
-    monitor.monitorId = monitor.id;
-    monitor.availability =
-      ((monitor.totalRequests - monitor.totalDownTimes) /
-        monitor.totalRequests) *
-      100;
-    monitor.threshold = threshold;
-    monitor.confing = confing
-    monitor.tags = tags;
     let checkDate = await new Monitor(monitor).save();
 
     return checkDate;
@@ -44,12 +35,16 @@ class MonitorService {
         message: "This check is NOT exists",
       };
 
-    let user = await User.findOne({_id: userId})
-    updatedData.userEmail = user.email
+    let user = await User.findOne({ _id: userId });
+    updatedData.userEmail = user.email;
+    updatedData.userId = user._id;
     let prevData = {
       website: check.website,
       interval: check.interval,
     };
+
+    updatedData.threshold = updatedData.threshold ? updatedData.threshold : 1;
+    updatedData._maxListeners = 5;
     await pingServers(updatedData, prevData);
 
     await Monitor.updateOne({ _id: id }, { $set: updatedData });
@@ -57,8 +52,8 @@ class MonitorService {
     return;
   }
 
-  async pause(id) {
-    let check = await Monitor.findOne({ _id: id });
+  async pause(id, userId) {
+    let check = await Monitor.findOne({ _id: id, userId });
 
     if (!check)
       throw {
@@ -72,8 +67,8 @@ class MonitorService {
     return check;
   }
 
-  async delete(id) {
-    const check = await Monitor.findByIdAndDelete(mongoose.Types.ObjectId(id));
+  async delete(id, userId) {
+    const check = await Monitor.findOneAndDelete({ _id: id, userId });
 
     if (!check)
       throw {
@@ -95,7 +90,7 @@ class MonitorService {
       title: check.title,
       website: check.website,
       status: check.isUp == true ? "ONLINE" : "DOWN",
-      availability: `${parseInt(check.availability)}%` ,
+      availability: `${parseInt(check.availability)}%`,
       outages: check.totalDownTimes,
       uptime: check.uptime,
       downtime: check.downtime,

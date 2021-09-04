@@ -440,8 +440,8 @@
           "expect": {
             "statusCode": 200
           },
-          "tags": ["Production", "userCheck"]
-      
+          "tags": ["Production", "userCheck"],
+          "threshold": 1
       }
     },
     "updateMonitor": {
