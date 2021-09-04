@@ -12,7 +12,7 @@ The main idea to build an uptime monitoring RESTful API server which allows auth
 - Users can get detailed uptime reports about their checks availability, average response time, and total uptime/downtime.
 - Users can group their checks by tags and get reports by tag.
 
-## Acceptance Criteria
+## Monitor Object
 
 - Each check may have the following options:
   - `name` - The name of the check.
@@ -20,8 +20,6 @@ The main idea to build an uptime monitoring RESTful API server which allows auth
   - `protocol` - The resource protocol name `HTTP`, `HTTPS`, or `TCP`.
   - `path` - A specific path to be monitored (optional).
   - `port` - The server port number (optional).
-  - `webhook` - A webhook URL to receive a notification on (optional).
-  - `timeout` (defaults to 5 seconds) - The timeout of the polling request (optional).
   - `interval` (defaults to 10 minutes) - The time interval for polling requests (optional).
   - `threshold` (defaults to 1 failure) - The threshold of failed requests that will create an alert (optional).
   - `authentication` - An HTTP authentication header, with the Basic scheme, to be sent with the polling request (optional).
@@ -42,3 +40,30 @@ The main idea to build an uptime monitoring RESTful API server which allows auth
   - `responseTime` - The average response time for the URL.
   - `history` - Timestamped logs of the polling requests.
 
+Installing Uptime
+-----------------
+
+To install from GitHub, clone the repository and install dependencies using `npm`:
+
+```sh
+$ git clone https://github.com/Shenoudafarouk/Uptime-Monitoring.git
+$ cd Uptime-Monitoring
+$ npm install
+```
+add .env file
+```sh
+$ PORT = 3000
+$ JWT_Key =  "secret"
+```
+Lastly, start the application with:
+
+```sh
+$ npm start
+```
+Swagger API documentation
+-----------------
+![](screencapture.png)
+
+to open Swagger API documentation just browse to 
+
+    http://localhost:3000/api-docs
