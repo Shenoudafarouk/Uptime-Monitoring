@@ -2,6 +2,27 @@
 
 The main idea to build an uptime monitoring RESTful API server which allows authorized users to enter URLs they want monitored, and get detailed uptime reports about their availability, average response time, and total uptime/downtime.
 
+Installing Uptime
+-----------------
+
+To install from GitHub, clone the repository and install dependencies using `npm`:
+
+```sh
+$ git clone https://github.com/Shenoudafarouk/Uptime-Monitoring.git
+$ cd Uptime-Monitoring
+$ npm install
+```
+add .env file
+```sh
+$ PORT = 3000
+$ JWT_Key =  "secret"
+```
+Lastly, start the application with:
+
+```sh
+$ npm start
+```
+
 ## Features
 
 - Sign-up with email verification.
@@ -12,6 +33,19 @@ The main idea to build an uptime monitoring RESTful API server which allows auth
 - Users can get detailed uptime reports about their checks availability, average response time, and total uptime/downtime.
 - Users can group their checks by tags and get reports by tag.
 
+Swagger API documentation
+-----------------
+![](screencapture.png)
+
+to open Swagger API documentation just browse to 
+
+    http://localhost:3000/api-docs
+
+Test
+-----------------
+```sh
+$ npm test
+```
 ## Monitor Object
 
 - Each check may have the following options:
@@ -40,37 +74,5 @@ The main idea to build an uptime monitoring RESTful API server which allows auth
   - `responseTime` - The average response time for the URL.
   - `history` - Timestamped logs of the polling requests.
 
-Installing Uptime
------------------
 
-To install from GitHub, clone the repository and install dependencies using `npm`:
-
-```sh
-$ git clone https://github.com/Shenoudafarouk/Uptime-Monitoring.git
-$ cd Uptime-Monitoring
-$ npm install
-```
-add .env file
-```sh
-$ PORT = 3000
-$ JWT_Key =  "secret"
-```
-Lastly, start the application with:
-
-```sh
-$ npm start
-```
-Swagger API documentation
------------------
-![](screencapture.png)
-
-to open Swagger API documentation just browse to 
-
-    http://localhost:3000/api-docs
-
-Test
------------------
-```sh
-$ npm test
-```
 
